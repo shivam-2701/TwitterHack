@@ -58,6 +58,9 @@ public class TweetAdapter {
         if (expansions != null) {
             final TweetAttachments attachments = tweet.getAttachments();
             final List<Media> media = expansions.getMedia();
+            /*
+                Extracting Media of each tweet from list of media from Expansions
+            */
 
             if (attachments != null && media != null) {
                 if (attachments.getMediaKeys() != null) {

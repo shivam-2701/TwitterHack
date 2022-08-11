@@ -4,22 +4,17 @@ import android.util.Log;
 
 import com.example.twitterhack.TweetAdapters.MediaEntityAdapter;
 import com.example.twitterhack.TweetAdapters.TweetAdapter;
+import com.example.twitterhack.TweetAdapters.TweetData;
 import com.example.twitterhack.TweetAdapters.TwitterEntityFields;
-import com.example.twitterhack.TweetData;
 import com.twitter.clientlib.ApiException;
 import com.twitter.clientlib.api.TwitterApi;
 import com.twitter.clientlib.model.Expansions;
 import com.twitter.clientlib.model.Get2TweetsResponse;
 import com.twitter.clientlib.model.Get2TweetsSearchRecentResponse;
-import com.twitter.clientlib.model.Media;
 import com.twitter.clientlib.model.ResourceUnauthorizedProblem;
 import com.twitter.clientlib.model.Tweet;
-import com.example.twitterhack.TweetAdapters.TwitterEntityFields;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -45,12 +40,13 @@ public final class SearchUtils {
     public static ArrayList<String> ExtractIds(Get2TweetsSearchRecentResponse response){
         ArrayList<String> idList= new ArrayList<>();
         List<Tweet> tweets= response.getData();
+        if(tweets!=null){
         for ( Tweet tweet: tweets) {
                 idList.add(tweet.getId());
-        }
+        }}
         return idList;
     }
-    public static ArrayList<TweetAdapter> GetImagesUrl(TwitterApi twitterApi,ArrayList<String> idList,Set<String> expansions){
+    public static ArrayList<TweetData> GetImagesUrl(TwitterApi twitterApi, ArrayList<String> idList, Set<String> expansions){
         //Tweet feilds;
 
 
@@ -71,20 +67,45 @@ public final class SearchUtils {
             tweetsIdResponse.getErrors().forEach(e -> {
                 Log.d("Api Response",e.toString());
                 if (e instanceof ResourceUnauthorizedProblem) {
-                    Log.d("Api Response",((ResourceUnauthorizedProblem) e).getTitle() + " " + ((ResourceUnauthorizedProblem) e).getDetail());
+                    Log.d("Api Response",e.getTitle() + " " +  e.getDetail());
                 }
             });
         }else{
-
-
-            Expansions included = tweetsIdResponse.getIncludes();
-            ArrayList<TweetAdapter> tweetAdapterList= new ArrayList<>();
-            List<Tweet> data = tweetsIdResponse.getData();
-            //Getting Hydrated tweetObject List
-            for (Tweet tweet : data ) {
-                tweetAdapterList.add( new TweetAdapter(tweet,included));
+            Expansions included=null;
+            //Tweet expansions from the response
+            if(tweetsIdResponse!=null) {
+                included = tweetsIdResponse.getIncludes();
             }
-            return tweetAdapterList;
+
+            ArrayList<TweetAdapter> tweetAdapterList= new ArrayList<>();
+            List<Tweet> data=null;
+            if(tweetsIdResponse!=null) {
+                //List of Tweets from the response
+                data = tweetsIdResponse.getData();
+            }
+            if(data!=null) {
+                //Getting Hydrated tweetObject List
+                for (Tweet tweet : data) {
+                    tweetAdapterList.add(new TweetAdapter(tweet, included));
+                }
+            }
+
+            //List of tweetData object
+            ArrayList<TweetData> tweetDataList = new ArrayList<>();
+
+
+            Log.d("TweetData",""+ tweetAdapterList.size());
+
+            for(TweetAdapter tweetAdapter: tweetAdapterList){
+                if(tweetAdapter.getMedia().size()!=0){
+                    List<String> Urls=new ArrayList<>();
+                    for(MediaEntityAdapter media: tweetAdapter.getMedia()){
+                        Urls.add(media.getURL());
+                    }
+                    tweetDataList.add(new TweetData(tweetAdapter.getTweet(),Urls,tweetAdapter.getUser()));
+                }
+            }
+            return tweetDataList;
 
 
 
