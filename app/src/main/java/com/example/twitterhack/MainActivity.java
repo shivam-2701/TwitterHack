@@ -1,6 +1,7 @@
 package com.example.twitterhack;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -11,6 +12,8 @@ import android.widget.Toast;
 import com.example.twitterhack.utils.ApiInstance;
 
 public class MainActivity extends AppCompatActivity {
+
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
