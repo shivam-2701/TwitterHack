@@ -75,6 +75,8 @@ public final class SearchUtils {
             //Tweet expansions from the response
             if(tweetsIdResponse!=null) {
                 included = tweetsIdResponse.getIncludes();
+            }else{
+                Log.e("SearchUtils","Expansions from tweetsIdResponse NULL");
             }
 
             ArrayList<TweetAdapter> tweetAdapterList= new ArrayList<>();
@@ -83,11 +85,16 @@ public final class SearchUtils {
                 //List of Tweets from the response
                 data = tweetsIdResponse.getData();
             }
+            else{
+                Log.e("SearchUtils","tweetsIdResponse is NULL");
+            }
             if(data!=null) {
                 //Getting Hydrated tweetObject List
                 for (Tweet tweet : data) {
                     tweetAdapterList.add(new TweetAdapter(tweet, included));
                 }
+            }else{
+                Log.e("SearchUtils","Data from tweetsIdResponse NULL");
             }
 
             //List of tweetData object
