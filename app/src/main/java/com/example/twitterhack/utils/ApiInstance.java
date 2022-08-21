@@ -11,7 +11,7 @@ public class ApiInstance {
     public TwitterApi twitterApi;
 
     private ApiInstance(Context context){
-            apiInstance.twitterApi= new TwitterApi(new TwitterCredentialsBearer(context.getString(R.string.BEARER_TOKEN)));
+            twitterApi= new TwitterApi(new TwitterCredentialsBearer(context.getString(R.string.BEARER_TOKEN)));
 
     }
     public static ApiInstance getInstance(Context context){

@@ -58,15 +58,12 @@ public class TwitterApiExample {
                 }
             });
         } else {
-//            Log.d("Api Response","findTweetById - Tweet Text: " + result.getData().size());
-            StringBuilder stringBuilder = new StringBuilder();
+
             ArrayList<String> idList = SearchUtils.ExtractIds(result);
             Log.d("Tweets Id", "" + idList.size());
             ArrayList<TweetData> tweetsDataList = SearchUtils.GetImagesUrl(apiInstance, idList, expansions);
             Log.d("TweetData", String.valueOf(tweetsDataList.size()));
-//            for (TweetData tweetData : tweetsDataList) {
-//                Log.d("TweetMediaUrl", tweetData.getMediaUrls().toString());
-//            }
+
 
 
 

@@ -2,14 +2,15 @@ package com.example.twitterhack.TweetAdapters;
 
 import com.twitter.clientlib.model.Tweet;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TweetData {
     private Tweet tweet;
-    private List<String> mediaUrls;
+    private ArrayList<String> mediaUrls;
     private UserAdapter userData;
 
-    public TweetData(Tweet tweet, List<String> mediaUrls, UserAdapter userData) {
+    public TweetData(Tweet tweet, ArrayList<String> mediaUrls, UserAdapter userData) {
         this.tweet = tweet;
         this.mediaUrls = mediaUrls;
         this.userData = userData;
@@ -19,7 +20,7 @@ public class TweetData {
         return tweet;
     }
 
-    public List<String> getMediaUrls() {
+    public ArrayList<String> getMediaUrls() {
         return mediaUrls;
     }
 

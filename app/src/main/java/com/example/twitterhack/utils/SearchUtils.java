@@ -71,6 +71,7 @@ public final class SearchUtils {
                 }
             });
         }else{
+
             Expansions included=null;
             //Tweet expansions from the response
             if(tweetsIdResponse!=null) {
@@ -91,30 +92,36 @@ public final class SearchUtils {
             if(data!=null) {
                 //Getting Hydrated tweetObject List
                 for (Tweet tweet : data) {
+                    if(tweet.getAttachments()==null || tweet.getAttachments().getMediaKeys()==null){
+                        continue;
+                    }
                     tweetAdapterList.add(new TweetAdapter(tweet, included));
                 }
             }else{
                 Log.e("SearchUtils","Data from tweetsIdResponse NULL");
             }
+            Log.d("TweetsResponse",tweetAdapterList.toString());
 
             //List of tweetData object
             ArrayList<TweetData> tweetDataList = new ArrayList<>();
 
 
-            Log.d("TweetData",""+ tweetAdapterList.size());
-
+            Log.d("TweetData>>",""+ tweetAdapterList.size());
+            int count =0;
+            int UrlsEnt=0;
             for(TweetAdapter tweetAdapter: tweetAdapterList){
                 if(tweetAdapter.getMedia().size()!=0){
-                    List<String> Urls=new ArrayList<>();
+                    ArrayList<String> Urls=new ArrayList<>();
+                    count++;
                     for(MediaEntityAdapter media: tweetAdapter.getMedia()){
                         Urls.add(media.getURL());
                     }
+                    UrlsEnt+=Urls.size();
                     tweetDataList.add(new TweetData(tweetAdapter.getTweet(),Urls,tweetAdapter.getUser()));
                 }
             }
+            Log.d("COunt",""+ count +" "+UrlsEnt);
             return tweetDataList;
-
-
 
         }
         Log.e("ImageListEmpty","Null list return from GetImagesUrl");

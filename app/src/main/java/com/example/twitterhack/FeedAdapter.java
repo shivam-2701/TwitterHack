@@ -1,6 +1,7 @@
 package com.example.twitterhack;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,14 +24,16 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedAdapterVie
 
     private ArrayList<TweetData> mTweetDataList;
 
-    public FeedAdapter(ArrayList<TweetData> mTweetDataList) {
-        this.mTweetDataList = mTweetDataList;
+    public void setmTweetDataList(ArrayList<TweetData> tweetDataList){
+        mTweetDataList= tweetDataList;
+        notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public FeedAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context= parent.getContext();
+        Log.d("mTweetData",""+mTweetDataList.size());
         int layoutIdForlistItem= R.layout.list_item;
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view=layoutInflater.inflate(layoutIdForlistItem,parent,false);
@@ -71,9 +74,10 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedAdapterVie
      */
     private class ImagePagerAdapter extends PagerAdapter{
 
-        List<String> mImages=null;
-        public ImagePagerAdapter( List<String> imageUrls){
+        ArrayList<String> mImages=null;
+        public ImagePagerAdapter( ArrayList<String> imageUrls){
             mImages= imageUrls;
+
         }
 
 
@@ -88,7 +92,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedAdapterVie
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
-            return view == ((ImageView) object);
+            return view == ( object);
         }
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
@@ -104,12 +108,16 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedAdapterVie
                     R.dimen.padding_medium);
             imageView.setPadding(padding, padding, padding, padding);
             imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            if(mImages!=null && mImages.size()<=position) {
-                Picasso.with(context)
+//            Log.d("ImagePager//", String.valueOf(mImages.size()));
+
+
+                Log.d("ImagePager", String.valueOf(mImages.size()));
+                Picasso.get()
                         .load(mImages.get(position))
+                        .error(R.drawable.error_image)
                         .into(imageView);
-            }
-            ((ViewPager) container).addView(imageView, 0);
+
+            container.addView(imageView);
             return imageView;
         }
     }
